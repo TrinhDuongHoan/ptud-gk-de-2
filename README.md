@@ -10,7 +10,7 @@
 
 - Đăng ký, đăng nhập tài khoản  
 - Tạo, chỉnh sửa, xóa công việc  
-- Theo dõi công việc quá hạn với badge thông báo  
+- Phân loại công việc theo Category
 - Giao diện thân thiện, responsive với Bootstrap 5  
 - Hệ thống thông báo khi thao tác thành công hoặc thất bại  
 
