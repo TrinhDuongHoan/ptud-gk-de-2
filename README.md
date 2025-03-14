@@ -1,2 +1,6 @@
-# ptud-gk-de-2
-Bài thi GK môn PTUD
+# 🎓 Thông tin cá nhân sinh viên
+
+- **👤 Họ và tên:** Trịnh Dương Hoan
+- **🆔 MSSV:** 22684251
+- **🔢 STT:** 19
+
