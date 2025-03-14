@@ -24,5 +24,5 @@ cd ptud-gk-de-2
 ```
 ### 2. Chạy file bat
 ```bash 
-run.bat
+run_app.bat
 ```
