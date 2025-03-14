@@ -10,7 +10,7 @@
 
 - Đăng ký, đăng nhập tài khoản  
 - Tạo, chỉnh sửa, xóa công việc  
-- Theo dõi công việc quá hạn với badge thông báo  
+- Phân loại công việc theo Category
 - Giao diện thân thiện, responsive với Bootstrap 5  
 - Hệ thống thông báo khi thao tác thành công hoặc thất bại  
 
@@ -25,4 +25,8 @@ cd ptud-gk-de-2
 ### 2. Chạy file bat
 ```bash 
 run_app.bat
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> d6c89ef669cc0de51cd4113df081315f3705ef8c
