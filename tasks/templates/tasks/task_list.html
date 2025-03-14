@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    {% if user.user_profile.get_overdue_tasks_count > 0 %}
+    <div class="alert alert-warning" role="alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        Bạn có {{ user.user_profile.get_overdue_tasks_count }} công việc quá hạn!
+    </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Danh sách công việc</h2>
+        <a href="{% url 'task-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Thêm công việc mới
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Pending Tasks -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="card-title mb-0">Đang chờ</h5>
+                </div>
+                <div class="card-body">
+                    {% for task in tasks %}
+                    {% if task.status == 'pending' %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text">{{ task.description|truncatechars:100 }}</p>
+                            <p class="text-muted small">Tạo: {{ task.created|date:"d/m/Y H:i" }}</p>
+                            <div class="btn-group">
+                                <a href="{% url 'task-detail' task.id %}" class="btn btn-sm btn-info">Chi tiết</a>
+                                <a href="{% url 'task-update' task.id %}" class="btn btn-sm btn-warning">Sửa</a>
+                                <a href="{% url 'task-delete' task.id %}" class="btn btn-sm btn-danger">Xóa</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress Tasks -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">Đang thực hiện</h5>
+                </div>
+                <div class="card-body">
+                    {% for task in tasks %}
+                    {% if task.status == 'in_progress' %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text">{{ task.description|truncatechars:100 }}</p>
+                            <p class="text-muted small">Tạo: {{ task.created|date:"d/m/Y H:i" }}</p>
+                            <div class="btn-group">
+                                <a href="{% url 'task-detail' task.id %}" class="btn btn-sm btn-info">Chi tiết</a>
+                                <a href="{% url 'task-update' task.id %}" class="btn btn-sm btn-warning">Sửa</a>
+                                <a href="{% url 'task-delete' task.id %}" class="btn btn-sm btn-danger">Xóa</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Tasks -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Hoàn thành</h5>
+                </div>
+                <div class="card-body">
+                    {% for task in tasks %}
+                    {% if task.status == 'completed' %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text">{{ task.description|truncatechars:100 }}</p>
+                            <p class="text-muted small">
+                                Tạo: {{ task.created|date:"d/m/Y H:i" }}<br>
+                                Hoàn thành: {{ task.finished|date:"d/m/Y H:i" }}
+                            </p>
+                            <div class="btn-group">
+                                <a href="{% url 'task-detail' task.id %}" class="btn btn-sm btn-info">Chi tiết</a>
+                                <a href="{% url 'task-update' task.id %}" class="btn btn-sm btn-warning">Sửa</a>
+                                <a href="{% url 'task-delete' task.id %}" class="btn btn-sm btn-danger">Xóa</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

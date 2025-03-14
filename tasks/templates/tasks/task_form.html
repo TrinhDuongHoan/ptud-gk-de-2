@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">
+                {% if form.instance.pk %}
+                    Cập nhật công việc
+                {% else %}
+                    Tạo công việc mới
+                {% endif %}
+            </legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group mt-3">
+            <button class="btn btn-outline-info" type="submit">
+                {% if form.instance.pk %}
+                    Cập nhật
+                {% else %}
+                    Tạo mới
+                {% endif %}
+            </button>
+            <a class="btn btn-outline-secondary" href="{% url 'task-list' %}">Hủy</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

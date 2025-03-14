@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <div class="mb-3">
+                <img class="rounded-circle account-img" src="{{ user.user_profile.avatar.url }}" id="profileAvatar">
+                <div class="mt-3">
+                    <!-- Nút cho avatar ngẫu nhiên -->
+                    <button class="btn btn-outline-primary mb-2" onclick="updateRandomAvatar()">
+                        <i class="fas fa-random"></i> Avatar ngẫu nhiên
+                    </button>
+                    
+                    <!-- Form tải ảnh lên -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h6 class="card-title">Tải ảnh từ máy tính</h6>
+                            <form id="avatarUploadForm" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <input type="file" class="form-control" id="avatarFile" name="avatar" 
+                                           accept="image/*" onchange="previewImage(this)">
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-upload"></i> Tải lên
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Thông tin hồ sơ</h2>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            {{ u_form|crispy }}
+                            {{ p_form|crispy }}
+                        </fieldset>
+                        <div class="form-group mt-3">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-save"></i> Cập nhật
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Hàm xem trước ảnh khi chọn file
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profileAvatar').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Hàm cập nhật avatar ngẫu nhiên
+async function updateRandomAvatar() {
+    try {
+        const response = await fetch('https://avatar.iran.liara.run/public');
+        const avatarUrl = response.url;
+        
+        // Cập nhật hiển thị avatar mới
+        document.getElementById('profileAvatar').src = avatarUrl;
+        
+        // Gửi URL avatar mới lên server
+        const formData = new FormData();
+        formData.append('avatar_url', avatarUrl);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        
+        const result = await fetch('{% url "update_avatar" %}', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (result.ok) {
+            showAlert('success', 'Avatar đã được cập nhật thành công!');
+        } else {
+            throw new Error('Lỗi khi cập nhật avatar');
+        }
+    } catch (error) {
+        console.error('Lỗi:', error);
+        showAlert('danger', 'Có lỗi xảy ra khi cập nhật avatar!');
+    }
+}
+
+// Xử lý form tải ảnh lên
+document.getElementById('avatarUploadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    try {
+        const formData = new FormData(this);
+        const response = await fetch('{% url "update_avatar" %}', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            showAlert('success', 'Avatar đã được tải lên thành công!');
+        } else {
+            throw new Error('Lỗi khi tải ảnh lên');
+        }
+    } catch (error) {
+        console.error('Lỗi:', error);
+        showAlert('danger', 'Có lỗi xảy ra khi tải ảnh lên!');
+    }
+});
+
+// Hàm hiển thị thông báo
+function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> 
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.querySelector('.content-section').insertBefore(alertDiv, document.querySelector('.row'));
+    
+    setTimeout(() => {
+        const bsAlert = new bootstrap.Alert(alertDiv);
+        bsAlert.close();
+    }, 5000);
+}
+</script>
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-section">
+    <h2>Bạn đã đăng xuất thành công</h2>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            Bạn muốn đăng nhập lại? <a href="{% url 'login' %}" class="ml-2">Đăng nhập</a>
+        </small>
+    </div>
+</div>
+{% endblock content %}
