@@ -1,18 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    {% if user.user_profile.get_overdue_tasks_count > 0 %}
-    <div class="alert alert-warning" role="alert">
-        <i class="fas fa-exclamation-triangle"></i>
-        Bạn có {{ user.user_profile.get_overdue_tasks_count }} công việc quá hạn!
-    </div>
-    {% endif %}
-
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Danh sách công việc</h2>
         <a href="{% url 'task-create' %}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Thêm công việc mới
         </a>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="mb-4">
+        <form method="get" action="{% url 'task-list' %}" class="form-inline">
+            <label for="category" class="mr-2">Lọc theo danh mục:</label>
+            <select name="category" id="category" class="form-control mr-2">
+                <option value="">Tất cả</option>
+                {% for value, label in task.CATEGORY_CHOICES %}
+                    <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-info">Lọc</button>
+        </form>
     </div>
 
     <div class="row">
@@ -29,7 +38,10 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ task.title }}</h5>
                             <p class="card-text">{{ task.description|truncatechars:100 }}</p>
-                            <p class="text-muted small">Tạo: {{ task.created|date:"d/m/Y H:i" }}</p>
+                            <p class="text-muted small">
+                                <strong>Danh mục:</strong> {{ task.get_category_display }}<br>
+                                Tạo: {{ task.created|date:"d/m/Y H:i" }}
+                            </p>
                             <div class="btn-group">
                                 <a href="{% url 'task-detail' task.id %}" class="btn btn-sm btn-info">Chi tiết</a>
                                 <a href="{% url 'task-update' task.id %}" class="btn btn-sm btn-warning">Sửa</a>
@@ -56,7 +68,10 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ task.title }}</h5>
                             <p class="card-text">{{ task.description|truncatechars:100 }}</p>
-                            <p class="text-muted small">Tạo: {{ task.created|date:"d/m/Y H:i" }}</p>
+                            <p class="text-muted small">
+                                <strong>Danh mục:</strong> {{ task.get_category_display }}<br>
+                                Tạo: {{ task.created|date:"d/m/Y H:i" }}
+                            </p>
                             <div class="btn-group">
                                 <a href="{% url 'task-detail' task.id %}" class="btn btn-sm btn-info">Chi tiết</a>
                                 <a href="{% url 'task-update' task.id %}" class="btn btn-sm btn-warning">Sửa</a>
@@ -84,6 +99,7 @@
                             <h5 class="card-title">{{ task.title }}</h5>
                             <p class="card-text">{{ task.description|truncatechars:100 }}</p>
                             <p class="text-muted small">
+                                <strong>Danh mục:</strong> {{ task.get_category_display }}<br>
                                 Tạo: {{ task.created|date:"d/m/Y H:i" }}<br>
                                 Hoàn thành: {{ task.finished|date:"d/m/Y H:i" }}
                             </p>

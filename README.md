@@ -15,7 +15,7 @@
 - Hệ thống thông báo khi thao tác thành công hoặc thất bại  
 
 ## Cài đặt Project
-
+x
 ### 1. Clone repository
 
 ```bash
@@ -24,5 +24,5 @@ cd ptud-gk-de-2
 ```
 ### 2. Chạy file bat
 ```bash 
-run.bat
+run_app.bat
 ```

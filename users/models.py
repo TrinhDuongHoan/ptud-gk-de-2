@@ -26,7 +26,6 @@ class Profile(models.Model):
         ).count()
 
     def save(self, *args, **kwargs):
-        # Lưu profile trước
         super().save(*args, **kwargs)
 
         # Tạo thư mục media/avatars nếu chưa tồn tại

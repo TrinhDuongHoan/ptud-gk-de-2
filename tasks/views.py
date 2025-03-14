@@ -14,6 +14,10 @@ def dashboard(request):
     tasks = Task.objects.filter(user=request.user).order_by('-created')
     overdue_count = request.user.user_profile.get_overdue_tasks_count()
     
+    category = request.GET.get('category')
+    if category:
+        tasks = tasks.filter(category=category)
+    
     context = {
         'tasks': tasks,
         'overdue_count': overdue_count,
